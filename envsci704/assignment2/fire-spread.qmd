@@ -41,14 +41,42 @@ Tips:
 Paste your complete NetLogo code (the `globals`, `setup`, and `go` procedures):
 
 ```netlogo
-;; your code here
+globals [
+  initial-trees
+  burned-trees
+]
+
+to setup
+  clear-all
+  ask patches [
+    if random 100 < density [ set pcolor green ]
+  ]
+  ask patches with [ pxcor = min-pxcor ] [
+    if pcolor = green [ set pcolor red ]
+  ]
+  set initial-trees count patches with [ pcolor = green or pcolor = red ]
+  set burned-trees 0
+  reset-ticks
+end
+
+to go
+  if not any? patches with [ pcolor = red ] [ stop ]
+  ask patches with [ pcolor = red ] [
+    ask neighbors4 with [ pcolor = green ] [
+      set pcolor red
+    ]
+    set pcolor grey
+    set burned-trees burned-trees + 1
+  ]
+  tick
+end
 ```
 
 **Task A1.** Embed your screenshot of the final state of the world at `density = 60`:
 
-![Replace with your caption](images/fire-density60.png){width=70%}
+![image1.png](images/fire-density60.png){width=70%}
 
-**Task A2.** Percent burned at the end of the run: _(value from the monitor)_
+**Task A2.** Percent burned at the end of the run: _(84.9%)_
 
 ## Part B: Find the critical density
 
@@ -66,6 +94,17 @@ Paste your complete NetLogo code (the `globals`, `setup`, and `go` procedures):
 | 65      |       |       |       |       |       |       |       |       |       |        |      |
 | 70      |       |       |       |       |       |       |       |       |       |        |      |
 | 80      |       |       |       |       |       |       |       |       |       |        |      |
+| 40      |13.1   |10.1   |13.1   |14.0   |13.2   |14.2   |6.3    |22.8   |23.3   |19.3    |14.9  |
+| 50      |37.0   |12.1   |23.8   |29.0   |27.1   |39.2   |15.8   |49.0   |15.7   |49.3    |29.8  |
+| 55      |67.6   |32.3   |59.2   |68.7   |76.1   |78.4   |57.4   |47.2   |27.8   |69.7    |58.4  |
+| 58      |85.3   |87.3   |63.6   |92.6   |42.8   |66.5   |72.8   |33.9   |90.5   |87.1    |72.2  |
+| 59      |60.5   |83.8   |69.4   |92.4   |86.6   |87.0   |94.1   |81.4   |77.4   |96.5    |82.9  |
+| 60      |90.5   |78.5   |88.1   |78.9   |51.1   |31.9   |91.2   |70.3   |89.3   |75.1    |74.5  |
+| 62      |95.6   |90.5   |91.0   |92.5   |96.8   |94.7   |93.6   |87.6   |93.6   |94.2    |93.0  |
+| 65      |97.2   |98.0   |97.2   |95.8   |95.2   |96.6   |97.2   |96.9   |94.6   |96.0    |96.4  |
+| 70      |99.1   |97.2   |99.3   |98.8   |99.5   |98.7   |96.5   |99.1   |97.5    |97.3   |98.3  |
+| 80      |99.9   |99.3   |100    |99.7   |99.8   |99.8   |99.9   |100    |100    |100     |99.8
+  |
 
 **Task B2.** Plot mean percent burned vs density. By hand or Excel: embed a photo or screenshot. In Python: use the code cell below.
 
@@ -74,7 +113,6 @@ Paste your complete NetLogo code (the `globals`, `setup`, and `go` procedures):
 import matplotlib.pyplot as plt
 
 density = [40, 50, 55, 58, 59, 60, 62, 65, 70, 80]
-mean_burned = []  # fill in your means
 
 fig, ax = plt.subplots(figsize=(6, 4))
 ax.plot(density, mean_burned, marker="o")
@@ -85,7 +123,7 @@ plt.show()
 ```
 
 **Task B3 (critical-density estimate).** 
-
+the critical density is 55% according to the data, as it is the lowest density that has a mean percent burned above 50%.compared to the theoretical critical density of 59% from the 
 **Task B4 (variability near the threshold).** 
 
 
