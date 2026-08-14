@@ -1,0 +1,114 @@
+---
+title: "Assignment 2: Fire-spread model in NetLogo"
+author: "Your Name (Student ID)"
+date: today
+format:
+  html:
+    toc: true
+    embed-resources: true
+execute:
+  warning: false
+---
+
+<!--
+============================================================
+ENVSCI 704 Assignment 2 template (fire-spread lab, Chapter 3.4)
+============================================================
+How to use this file:
+
+1. In your GitHub course repo, create the folder `Assignment2/`
+   and save this file there as `fire-spread.qmd`.
+2. Fill in the YAML header above (your name and student ID).
+3. Work through Parts A to C below. Every task needs code or a
+   screenshot AND a short written answer.
+4. Save screenshots as .png files in an `images/` folder next to
+   this file (macOS: Cmd+Shift+4, Windows: Snipping Tool), then
+   embed them like this:
+       ![caption](images/fire-density60.png){width=70%}
+5. Commit and push the .qmd AND the images/ folder, then paste
+   the link on Canvas.
+
+Tips:
+- NetLogo code goes in netlogo-fenced code blocks, not Python cells.
+- Give every screenshot a caption so the reader knows what it shows.
+- If you build your Part B table in Excel, convert it with
+  https://tabletomarkdown.com/convert-spreadsheet-to-markdown/
+============================================================
+-->
+
+## Part A: Build the model
+
+Paste your complete NetLogo code (the `globals`, `setup`, and `go` procedures):
+
+```netlogo
+;; your code here
+```
+
+**Task A1.** Embed your screenshot of the final state of the world at `density = 60`:
+
+![Replace with your caption](images/fire-density60.png){width=70%}
+
+**Task A2.** Percent burned at the end of the run: _(value from the monitor)_
+
+## Part B: Find the critical density
+
+**Task B1.** Complete the table: ten runs at each density, percent burned each time.
+
+| Density | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 | Run 6 | Run 7 | Run 8 | Run 9 | Run 10 | Mean |
+|--------:|------:|------:|------:|------:|------:|------:|------:|------:|------:|-------:|-----:|
+| 40      |       |       |       |       |       |       |       |       |       |        |      |
+| 50      |       |       |       |       |       |       |       |       |       |        |      |
+| 55      |       |       |       |       |       |       |       |       |       |        |      |
+| 58      |       |       |       |       |       |       |       |       |       |        |      |
+| 59      |       |       |       |       |       |       |       |       |       |        |      |
+| 60      |       |       |       |       |       |       |       |       |       |        |      |
+| 62      |       |       |       |       |       |       |       |       |       |        |      |
+| 65      |       |       |       |       |       |       |       |       |       |        |      |
+| 70      |       |       |       |       |       |       |       |       |       |        |      |
+| 80      |       |       |       |       |       |       |       |       |       |        |      |
+
+**Task B2.** Plot mean percent burned vs density. By hand or Excel: embed a photo or screenshot. In Python: use the code cell below.
+
+```{python}
+#| eval: false
+import matplotlib.pyplot as plt
+
+density = [40, 50, 55, 58, 59, 60, 62, 65, 70, 80]
+mean_burned = []  # fill in your means
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.plot(density, mean_burned, marker="o")
+ax.set_xlabel("Density (%)")
+ax.set_ylabel("Mean percent burned (%)")
+ax.set_title("Percent burned vs tree density")
+plt.show()
+```
+
+**Task B3 (critical-density estimate).** 
+
+**Task B4 (variability near the threshold).** 
+
+
+
+## Part C: Summary ODD documentation
+
+Replace each `<...>` placeholder with your own text about the fire model. Keep the **bold** phrases as they are and keep ODD's key words in *italics*. Aim for one short paragraph per element. 
+
+**The overall *purpose* of our model is** \<what question does the model address? 1 to 2 sentences.\> **Specifically, we are addressing the following questions:** \<e.g. how does the burned area respond to tree density?\> **To consider our model realistic enough for its purpose, we use the following *patterns*:** \<what real-world patterns should the model reproduce, e.g. a sharp threshold in fire spread?\>
+
+**The model includes the following *entities*:** \<list them, e.g. patches representing trees.\> **The *state variables* characterising these entities are listed in Table 1.** **The *spatial* and *temporal* resolution and extent are** \<world size in patches, what one patch and one tick represent, and when a run ends.\>
+
+**The most important *processes* of the model, which are repeated every *time step*, are** \<what happens each tick, in order — use the same names as in your code, e.g. ignition of neighbours, burnout.\>
+
+**The most important *design concepts* of the model are** \<e.g. emergence: the critical density threshold emerges from purely local spread rules; stochasticity: random tree placement.\>
+
+**The model is initialized with** \<initial conditions: how trees are placed, where the fire starts, and the slider settings used.\>
+
+**Table 1.** Entities and state variables of the model.
+
+| Entity | Variable | Description | Possible values | Units |
+|--------|----------|-------------|-----------------|-------|
+| Patch  | `pcolor` |             |                 |       |
+| Global | `density`|             |                 |       |
+| ...    |          |             |                 |       |
+
