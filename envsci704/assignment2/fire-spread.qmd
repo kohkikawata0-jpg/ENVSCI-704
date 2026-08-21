@@ -1,6 +1,6 @@
 ---
 title: "Assignment 2: Fire-spread model in NetLogo"
-author: "Your Name (Student ID)"
+author: kohki kawata 579554839
 date: today
 format:
   html:
@@ -92,7 +92,7 @@ end
 | 60      |90.5   |78.5   |88.1   |78.9   |51.1   |31.9   |91.2   |70.3   |89.3   |75.1    |74.5  |
 | 62      |95.6   |90.5   |91.0   |92.5   |96.8   |94.7   |93.6   |87.6   |93.6   |94.2    |93.0  |
 | 65      |97.2   |98.0   |97.2   |95.8   |95.2   |96.6   |97.2   |96.9   |94.6   |96.0    |96.4  |
-| 70      |99.1   |97.2   |99.3   |98.8   |99.5   |98.7   |96.5   |99.1   |97.5    |97.3   |98.3  |
+| 70      |99.1   |97.2   |99.3   |98.8   |99.5   |98.7   |96.5   |99.1   |97.5   |97.3    |98.3  |
 | 80      |99.9   |99.3   |100    |99.7   |99.8   |99.8   |99.9   |100    |100    |100     |99.8. |
 
 **Task B2.** Plot mean percent burned vs density. By hand or Excel: embed a photo or screenshot. In Python: use the code cell below.
@@ -115,28 +115,29 @@ plt.show()
 **Task B3 (critical-density estimate).** 
 the critical density is 55% according to the data, as it is the lowest density that has a mean percent burned above 50%.compared to the theoretical critical density of 59% from the 
 **Task B4 (variability near the threshold).** 
-
+Variability at 55% is high, with a mean percent burned of 58.4% and a range from 27.8% to 78.4%. Variability at 40% has a mean percent burned of 14.9% and a range from 6.3% to 23.3%, variability at 80% has a mean percent burned of 99.8% and a range from 99.3% to 100%. 
 
 
 ## Part C: Summary ODD documentation
 
 Replace each `<...>` placeholder with your own text about the fire model. Keep the **bold** phrases as they are and keep ODD's key words in *italics*. Aim for one short paragraph per element. 
 
-**The overall *purpose* of our model is** \<what question does the model address? 1 to 2 sentences.\> **Specifically, we are addressing the following questions:** \<e.g. how does the burned area respond to tree density?\> **To consider our model realistic enough for its purpose, we use the following *patterns*:** \<what real-world patterns should the model reproduce, e.g. a sharp threshold in fire spread?\>
+**The overall *purpose* of our model is** to find the critical density at which fire spread becomes highly likely. the model is designed to reflect real-world fire behaviour, the stochastic nature of fire spread, where the fire may or may not spread to neighbouring trees depending on their proximity and the density of the forest.
+  **Specifically, we are addressing the following questions:** how does the burned area respond to tree density? what is the critical density in which a fire has 50/50 chance of spreading to the entire map? Does the data reflect 59% critical density as a standard threshold? **To consider our model realistic enough for its purpose, we use the following *patterns*:** such as the stochasticity of fire spread, the local interactions between trees with the randomly generated gaps in between. 
 
-**The model includes the following *entities*:** \<list them, e.g. patches representing trees.\> **The *state variables* characterising these entities are listed in Table 1.** **The *spatial* and *temporal* resolution and extent are** \<world size in patches, what one patch and one tick represent, and when a run ends.\>
+**The model includes the following *entities*:** patches representing trees in green, the gaps representing empty spaces in black, burning trees reflected in red, and burned trees represented in grey.  **The *state variables* characterising these entities are listed in Table 1.** **The *spatial* and *temporal* resolution and extent are** the world size is 100x100 patches, one patch represents a tree or a gap, one tick represents one time step in which the fire spreads to neighbouring trees, and a run ends when there are no more burning trees left in the world.
+**The most important *processes* of the model, which are repeated every *time step*, are** at each tick, the model checks for burning trees (red patches) and spreads the fire to their neighbouring trees (green patches) with a probability of 100% if they are adjacent. After spreading, the burning trees turn grey to indicate they have burned out, and the process continues until no more trees are burning. within each tick, the model also counts the number of burned trees, and updates the global variable 'burned-trees' to keep track of the total number of trees burned. As we press 'go', the model checks for 'pcolor = red' and if so it runs 'stop' which kills the simulation. This is the stopping condition for the model. 'ask neighbors4 with [ pcolor = green ] [ set pcolor red ]' is the fire spread process, which checks for neighbouring patches on all sides that are green and sets them to red, indicating they are now burning. When a red patch transfers to an adjacent green patch, the former patch turns grey, indicating it has burned out. 
 
-**The most important *processes* of the model, which are repeated every *time step*, are** \<what happens each tick, in order — use the same names as in your code, e.g. ignition of neighbours, burnout.\>
+**The most important *design concepts* of the model are** the basic principles of fire spread done in a model that is stachastic yet predetermined by setup. the only stochastic element is the random placement of trees and gaps, which creates variability in the fire spread. It is meant to demonstrate where the critical density threshold is which a simple model set up. Below the critical threshold, fire does not spread easily, and above the threshold, fire is more likely to engulf the map. The emergence of the model is from the interaction of density of the trees, with a simple rule for its spreading mechanism. There are no adaptive behaviours in the model, as the patches dont change their behaviour and is set with a simple rule for behaviour. There are no objectives, learning or prediction done by any entities, where sensing is very limited. It only senses the 'pcolor' of its four neighbouring patches 'neighbors4', and has no awareness of the global state of the world. The model is not meant to be a realistic representation of fire spread, but rather a simple model to demonstrate the concept of critical density and the stochastic nature of fire spread. The model tracks two outcomes, 'initial-trees' and 'burned-trees', which are global variables that keep track of the total number of trees in the world and the total number of trees that have burned, respectively.
 
-**The most important *design concepts* of the model are** \<e.g. emergence: the critical density threshold emerges from purely local spread rules; stochasticity: random tree placement.\>
-
-**The model is initialized with** \<initial conditions: how trees are placed, where the fire starts, and the slider settings used.\>
+**The model is initialized with** a random distribution of trees and gaps, which is shown through the 'set up' procedure. the model is initialized with a specified density of trees, which is then used to randomly assign patches as either trees (green) or gaps (black). The red patches are intialised at the very left edge as min-pxcor is the smallest x coordinate in this world, and the following line 'if pcolor = green [set pcolor red]' sets the patches red if they are green, which becomes the starting point of the fire. so if any trees are randomly assigned to the west edge of the world, they will be set onn fire as the per the initial set up. 
 
 **Table 1.** Entities and state variables of the model.
 
 | Entity | Variable | Description | Possible values | Units |
 |--------|----------|-------------|-----------------|-------|
-| Patch  | `pcolor` |             |                 |       |
-| Global | `density`|             |                 |       |
-| ...    |          |             |                 |       |
-
+| Patch  | `pcolor` |the status of each cell, whether it is a tree, a gap or a burning tree             | green, red, grey, black           | none      |
+| Global | `density`| an interactive parameter before 'set up', where the probability assigns randomly the 'pcolor' of each patch            | 0-100       | percent      |
+| Global | `initial-trees` | the total number of trees in the world at 'set up'| 0-100 | count of patches |
+| Global | `burned-trees` | the total number of trees that have turned from green to red and then grey | 0-'initial-trees' | count of patches |
+| global | 'ticks' | the number of time 'go' has been initiated since 'set up' | not defined | count of ticks |
